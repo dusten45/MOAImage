@@ -5,6 +5,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
     build-essential \
     libclang-dev \
     gcc-aarch64-linux-gnu \
@@ -28,6 +29,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ncurses-term \
     kitty-terminfo \
     && rm -rf /var/lib/apt/lists/*
+
+# UTF-8 locales for SSH clients.
+RUN locale-gen ko_KR.UTF-8 en_US.UTF-8 \
+    && LANG=ko_KR.UTF-8 LC_ALL=ko_KR.UTF-8 locale charmap | grep -Fx 'UTF-8'
+
+# Safe UTF-8 fallback. SSH may override LANG with ko_KR.UTF-8, which now exists.
+ENV LANG=C.UTF-8
 
 # GitHub CLI
 RUN mkdir -p -m 755 /etc/apt/keyrings \
