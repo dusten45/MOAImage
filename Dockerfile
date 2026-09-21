@@ -65,6 +65,8 @@ RUN curl -L --proto '=https' --tlsv1.2 -sSf \
 RUN /venv/main/bin/python -m pip install --no-cache-dir --upgrade pip \
     && /venv/main/bin/python -m pip install --no-cache-dir numpy safetensors \
     && /venv/main/bin/python -m pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+    
+RUN ln -sf /usr/bin/infocmp /venv/main/bin/infocmp
 
 ARG KILO_VERSION=7.7.5
 RUN curl -fsSL https://kilo.ai/cli/install \
